@@ -18,21 +18,21 @@ public class Fenetre extends JFrame {
     JComboBox<BureauVote> listBV;
 
     public Fenetre() {
-        setTitle("Sélection Électorale");
+        setTitle("Election deputes");
         setSize(500, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(5, 2)); // 5 lignes, 2 colonnes
+        setLocationRelativeTo(null);
+        setLayout(new GridLayout(5, 2)); 
 
         initializeComponents();
 
-        // Ajout des composants à la fenêtre
         add(new JLabel("Faritany :"));
         add(listFaritany);
         add(new JLabel("Faritra :"));
         add(listFaritra);
         add(new JLabel("Distrika :"));
         add(listDistrika);
-        add(new JLabel("Député :"));
+        add(new JLabel("Depute :"));
         add(listDepute);
         add(new JLabel("Bureau de vote :"));
         add(listBV);
@@ -50,7 +50,7 @@ public class Fenetre extends JFrame {
             listFaritany.addItem(f);
         }
 
-        // Listener : mise à jour des faritra
+        // Listener : mise a jour des faritra
         listFaritany.addActionListener(e -> {
             Faritany selectedFaritany = (Faritany) listFaritany.getSelectedItem();
             listFaritra.removeAllItems();
@@ -64,7 +64,7 @@ public class Fenetre extends JFrame {
             listBV.removeAllItems();
         });
 
-        // Listener : mise à jour des distrika
+        // Listener : mise a jour des distrika
         listFaritra.addActionListener(e -> {
             Faritra selectedFaritra = (Faritra) listFaritra.getSelectedItem();
             listDistrika.removeAllItems();
@@ -77,7 +77,7 @@ public class Fenetre extends JFrame {
             listBV.removeAllItems();
         });
 
-        // Listener : mise à jour des députés et bureaux
+        // Listener : mise a jour des deputes et bureaux
         listDistrika.addActionListener(e -> {
             Distrika selectedDistrika = (Distrika) listDistrika.getSelectedItem();
             listDepute.removeAllItems();
@@ -92,16 +92,12 @@ public class Fenetre extends JFrame {
                 }
             }
         });
-
-        // if (listFaritany.getItemCount() > 0) {
-        //     listFaritany.setSelectedIndex(0);
-        // }
     }
 
     private List<Faritany> getFaritanyData() {
-        // Création manuelle d'exemples pour Faritra, Distrika, Depute, BureauVote
+        // Creation manuelle d'exemples pour Faritra, Distrika, Depute, BureauVote
 
-        // Députés
+        // Deputes
         List<Depute> deputes1 = List.of(new Depute("Rakoto", null), new Depute("Rabe", null));
         List<Depute> deputes2 = List.of(new Depute("Randria", null));
 
@@ -109,7 +105,7 @@ public class Fenetre extends JFrame {
         Distrika distrika1 = new Distrika("Distrika A", null, deputes1, deputes1.size());
         Distrika distrika2 = new Distrika("Distrika B", null, deputes2, deputes2.size());
 
-        // Relier députés aux distrika
+        // Relier deputes aux distrika
         for (Depute d : deputes1) {
             d.setDistrikaCandidat(distrika1);
         }
