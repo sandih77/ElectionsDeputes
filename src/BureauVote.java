@@ -28,6 +28,10 @@ public class BureauVote {
         return this.distrika;
     }
 
+    public void setDistrika(Distrika d) {
+        this.distrika = d;
+    }
+
     @Override
     public String toString() {
         return nom;
