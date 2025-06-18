@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
 
 public class ConfirmerResultatListener implements ActionListener {
 
@@ -34,7 +35,7 @@ public class ConfirmerResultatListener implements ActionListener {
                     fenetre.getButtonConfirmer().setText("Confirmer Faritra");
                     fenetre.getTextArea().setText("");
                 } else {
-                    showMessage("Veuillez sélectionner un Faritany.");
+                    showMessage("Veuillez selectionner un Faritany.");
                 }
             }
 
@@ -45,10 +46,10 @@ public class ConfirmerResultatListener implements ActionListener {
                     fenetre.remplirDistrika(faritany, faritra);
                     fenetre.getComboDistrika().setEnabled(true);
                     fenetre.setEtapeSelection(2);
-                    fenetre.getButtonConfirmer().setText("Réinitialiser");
+                    fenetre.getButtonConfirmer().setText("Reinitialiser");
                     fenetre.getTextArea().setText("");
                 } else {
-                    showMessage("Veuillez sélectionner un Faritra.");
+                    showMessage("Veuillez selectionner un Faritra.");
                 }
             }
 
@@ -65,8 +66,8 @@ public class ConfirmerResultatListener implements ActionListener {
         }
     }
 
-    private void afficherElu() {
-        String resultat = "";
+    public void afficherElu() {
+        StringBuilder resultat = new StringBuilder();
         String faritany = (String) fenetre.getComboFaritany().getSelection();
         String faritra = (String) fenetre.getComboFaritra().getSelection();
         String distrika = (String) fenetre.getComboDistrika().getSelection();
@@ -74,14 +75,21 @@ public class ConfirmerResultatListener implements ActionListener {
         if (distrika != null && !distrika.isBlank()) {
             List<Vote> votes = fenetre.getResult().filtrerVotesParDistrika(fenetre.getListVote(), distrika);
             String elu = fenetre.getResult().trouverEluDansDistrika(votes);
-            resultat += "Distrika : " + distrika + " → élu : " + elu + "\n";
+            resultat.append("Distrika : ").append(distrika).append(" → elu : ").append(elu).append("\n\n");
+
+            // Affichage nombre d'elus par parti
+            Map<String, Integer> nbElusParParti = fenetre.getResult().getNbElusParParti(votes);
+            resultat.append("Nombre d'elus par parti :\n");
+            for (Map.Entry<String, Integer> entry : nbElusParParti.entrySet()) {
+                resultat.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n");
+            }
 
         } else if (faritra != null && !faritra.isBlank()) {
             List<String> distrikas = fenetre.getResult().getNomsDistrikaDansFaritra(fenetre.getListVote(), faritany, faritra);
             for (String d : distrikas) {
                 List<Vote> votes = fenetre.getResult().filtrerVotesParDistrika(fenetre.getListVote(), d);
                 String elu = fenetre.getResult().trouverEluDansDistrika(votes);
-                resultat += "Distrika : " + d + " → élu : " + elu + "\n";
+                resultat.append("Distrika : ").append(d).append(" → elu : ").append(elu).append("\n");
             }
 
         } else if (faritany != null && !faritany.isBlank()) {
@@ -91,18 +99,18 @@ public class ConfirmerResultatListener implements ActionListener {
                 for (String d : distrikas) {
                     List<Vote> votes = fenetre.getResult().filtrerVotesParDistrika(fenetre.getListVote(), d);
                     String elu = fenetre.getResult().trouverEluDansDistrika(votes);
-                    resultat += "Distrika : " + d + " → élu : " + elu + "\n";
+                    resultat.append("Distrika : ").append(d).append(" → elu : ").append(elu).append("\n");
                 }
             }
 
         } else {
-            resultat += "Veuillez choisir au moins un Faritany.\n";
+            resultat.append("Veuillez choisir au moins un Faritany.\n");
         }
 
-        fenetre.getTextArea().setText(resultat);
+        fenetre.getTextArea().setText(resultat.toString());
     }
 
-    private void showMessage(String message) {
+    public void showMessage(String message) {
         JOptionPane.showMessageDialog(fenetre, message, "Attention", JOptionPane.WARNING_MESSAGE);
     }
 }

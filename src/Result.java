@@ -21,11 +21,11 @@ public class Result {
                     continue;
                 }
 
-                String f = parts[0].trim();               
-                String r = parts[1].trim();               
-                String d = parts[2].trim();               
+                String f = parts[0].trim();
+                String r = parts[1].trim();
+                String d = parts[2].trim();
                 int nbPeutetreElus = Integer.parseInt(parts[3].trim());
-                String deputeStr = parts[4].trim();       
+                String deputeStr = parts[4].trim();
                 String bv = parts[5].trim();
                 int n = Integer.parseInt(parts[6].trim());
 
@@ -103,12 +103,76 @@ public class Result {
         int voteSecond = scores.get(second);
 
         if (voteSecond * 2 > votePremier) {
-            return titulaires.get(first) + " (" + votePremier + " votes) et " +
-                   titulaires.get(second) + " (" + voteSecond + " votes)";
+            return titulaires.get(first) + " (" + votePremier + " votes) et "
+                    + titulaires.get(second) + " (" + voteSecond + " votes)";
         } else {
-            return titulaires.get(first) + " (" + votePremier + " votes) et son suppléant " +
-                   suppleants.get(first);
+            return titulaires.get(first) + " (" + votePremier + " votes) et son suppléant "
+                    + suppleants.get(first);
         }
+    }
+
+    public Map<String, Integer> getNbElusParParti(List<Vote> votesDuDistrika) {
+        Map<String, Integer> result = new HashMap<>();
+        if (votesDuDistrika.isEmpty()) {
+            return result;
+        }
+
+        int nbElus = votesDuDistrika.get(0).getPeutEtreElus();
+
+        List<String> titulaires = new ArrayList<>();
+        List<String> suppleants = new ArrayList<>();
+        List<Integer> scores = new ArrayList<>();
+
+        for (Vote v : votesDuDistrika) {
+            String titulaire = v.getTitulaire();
+            int index = titulaires.indexOf(titulaire);
+            if (index == -1) {
+                titulaires.add(titulaire);
+                suppleants.add(v.getSecond());
+                scores.add(v.getNombreVote());
+            } else {
+                scores.set(index, scores.get(index) + v.getNombreVote());
+            }
+        }
+
+        for (int i = 0; i < scores.size() - 1; i++) {
+            for (int j = i + 1; j < scores.size(); j++) {
+                if (scores.get(j) > scores.get(i)) {
+                    int tmpScore = scores.get(i);
+                    scores.set(i, scores.get(j));
+                    scores.set(j, tmpScore);
+
+                    String tmpTit = titulaires.get(i);
+                    titulaires.set(i, titulaires.get(j));
+                    titulaires.set(j, tmpTit);
+
+                    String tmpSup = suppleants.get(i);
+                    suppleants.set(i, suppleants.get(j));
+                    suppleants.set(j, tmpSup);
+                }
+            }
+        }
+
+        for (int i = 0; i < titulaires.size(); i++) {
+            result.put(titulaires.get(i), 0);
+        }
+
+        if (nbElus == 1 || titulaires.size() == 1) {
+            result.put(titulaires.get(0), 1);
+        } else {
+            int vote1 = scores.get(0);
+            int vote2 = scores.get(1);
+
+            if (vote2 * 2 > vote1) {
+                result.put(titulaires.get(0), 1);
+                result.put(titulaires.get(1), 1);
+            } else {
+                result.put(titulaires.get(0), 2);
+                result.put(titulaires.get(1), 0);
+            }
+        }
+
+        return result;
     }
 
     public List<String> getNomsFaritany(List<Vote> votes) {

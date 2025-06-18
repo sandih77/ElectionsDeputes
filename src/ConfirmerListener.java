@@ -22,10 +22,10 @@ public class ConfirmerListener implements ActionListener {
         int etape = fenetre.getEtapeSelection();
 
         switch (etape) {
-            case 0 -> { 
+            case 0 -> {
                 Faritany selectedFaritany = (Faritany) fenetre.getListFaritany().getSelection();
                 if (selectedFaritany == null) {
-                    showMessage("Veuillez sélectionner un Faritany.");
+                    showMessage("Veuillez selectionner un Faritany.");
                     return;
                 }
                 fenetre.getListFaritra().remplir(selectedFaritany.getListFaritra().toArray());
@@ -41,17 +41,16 @@ public class ConfirmerListener implements ActionListener {
                 fenetre.setEtapeSelection(1);
                 fenetre.getBtnConfirmer().setText("Confirmer Faritra");
             }
-            case 1 -> { 
+            case 1 -> {
                 Faritra selectedFaritra = (Faritra) fenetre.getListFaritra().getSelection();
                 if (selectedFaritra == null) {
-                    showMessage("Veuillez sélectionner un Faritra.");
+                    showMessage("Veuillez selectionner un Faritra.");
                     return;
                 }
-                // Remplir la liste Distrika
+
                 fenetre.getListDistrika().remplir(selectedFaritra.getListDistrika().toArray());
                 fenetre.getListDistrika().setEnabled(true);
 
-                // Nettoyer listes suivantes
                 fenetre.getListDepute().vider();
                 fenetre.getListDepute().setEnabled(false);
                 fenetre.getListBV().vider();
@@ -60,27 +59,26 @@ public class ConfirmerListener implements ActionListener {
                 fenetre.setEtapeSelection(2);
                 fenetre.getBtnConfirmer().setText("Confirmer Distrika");
             }
-            case 2 -> { // Confirmer Distrika
+            case 2 -> {
                 Distrika selectedDistrika = (Distrika) fenetre.getListDistrika().getSelection();
                 if (selectedDistrika == null) {
-                    showMessage("Veuillez sélectionner un Distrika.");
+                    showMessage("Veuillez selectionner un Distrika.");
                     return;
                 }
-                // Remplir la liste Depute
+
                 fenetre.getListDepute().remplir(selectedDistrika.getListDepute().toArray());
                 fenetre.getListDepute().setEnabled(true);
 
-                // Remplir la liste Bureau de Vote
                 fenetre.getListBV().vider();
                 List<BureauVote> bureauVotes = getBureauxFromDistrika(selectedDistrika);
                 fenetre.getListBV().remplir(bureauVotes.toArray()); // <-- Ici la vraie source des BV
                 fenetre.getListBV().setEnabled(true);
 
                 fenetre.setEtapeSelection(3);
-                fenetre.getBtnConfirmer().setText("Réinitialiser");
+                fenetre.getBtnConfirmer().setText("Reinitialiser");
             }
 
-            case 3 -> { // Réinitialiser
+            case 3 -> {
                 fenetre.getListFaritany().setEnabled(true);
                 fenetre.getListFaritra().vider();
                 fenetre.getListFaritra().setEnabled(false);
