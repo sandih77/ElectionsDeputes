@@ -21,11 +21,11 @@ public class Result {
                     continue;
                 }
 
-                String f = parts[0].trim();
-                String r = parts[1].trim();
-                String d = parts[2].trim();
+                String f = parts[0].trim();               
+                String r = parts[1].trim();               
+                String d = parts[2].trim();               
                 int nbPeutetreElus = Integer.parseInt(parts[3].trim());
-                String deputeStr = parts[4].trim();
+                String deputeStr = parts[4].trim();       
                 String bv = parts[5].trim();
                 int n = Integer.parseInt(parts[6].trim());
 
@@ -95,30 +95,20 @@ public class Result {
             }
         }
 
-        int personnesElues = 0;
-        String resultat;
-
         if (nbElus == 1 || second == -1) {
-            personnesElues = 2;
-            resultat = titulaires.get(first) + " (" + scores.get(first) + " votes)";
-            resultat += " et son suppléant " + suppleants.get(first);
-        } else {
-            int votePremier = scores.get(first);
-            int voteSecond = scores.get(second);
-
-            if (voteSecond * 2 > votePremier) {
-                personnesElues = 1;
-                resultat = titulaires.get(first) + " (" + votePremier + " votes) et "
-                        + titulaires.get(second) + " (" + voteSecond + " votes)";
-            } else {
-                personnesElues = 1;
-                resultat = titulaires.get(first) + " (" + votePremier + " votes) et son suppléant "
-                        + suppleants.get(first);
-            }
+            return titulaires.get(first) + " (" + scores.get(first) + " votes)";
         }
 
-        resultat += "\nNombre total de personnes élues : " + personnesElues;
-        return resultat;
+        int votePremier = scores.get(first);
+        int voteSecond = scores.get(second);
+
+        if (voteSecond * 2 > votePremier) {
+            return titulaires.get(first) + " (" + votePremier + " votes) et " +
+                   titulaires.get(second) + " (" + voteSecond + " votes)";
+        } else {
+            return titulaires.get(first) + " (" + votePremier + " votes) et son suppléant " +
+                   suppleants.get(first);
+        }
     }
 
     public List<String> getNomsFaritany(List<Vote> votes) {

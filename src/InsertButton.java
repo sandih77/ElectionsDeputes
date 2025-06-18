@@ -5,25 +5,26 @@ import delimitation.Distrika;
 import delimitation.Faritany;
 import delimitation.Faritra;
 import elections.BureauVote;
+import gui.FileDeroulante;
 
 import javax.swing.*;
 import java.io.*;
 
 public class InsertButton extends JButton {
 
-    JComboBox<Faritany> listFaritany;
-    JComboBox<Faritra> listFaritra;
-    JComboBox<Distrika> listDistrika;
-    JComboBox<Depute> listDepute;
-    JComboBox<BureauVote> listBV;
+    FileDeroulante listFaritany;
+    FileDeroulante listFaritra;
+    FileDeroulante listDistrika;
+    FileDeroulante listDepute;
+    FileDeroulante listBV;
     JTextField votes;
 
     public InsertButton(String label,
-            JComboBox<Faritany> listFaritany,
-            JComboBox<Faritra> listFaritra,
-            JComboBox<Distrika> listDistrika,
-            JComboBox<Depute> listDepute,
-            JComboBox<BureauVote> listBV,
+            FileDeroulante listFaritany,
+            FileDeroulante listFaritra,
+            FileDeroulante listDistrika,
+            FileDeroulante listDepute,
+            FileDeroulante listBV,
             JTextField votes) {
         super(label);
         this.listFaritany = listFaritany;
@@ -37,11 +38,11 @@ public class InsertButton extends JButton {
     }
 
     private void saveVoteToFile(String filename) {
-        Faritany f = (Faritany) listFaritany.getSelectedItem();
-        Faritra r = (Faritra) listFaritra.getSelectedItem();
-        Distrika d = (Distrika) listDistrika.getSelectedItem();
-        Depute dep = (Depute) listDepute.getSelectedItem();
-        BureauVote bv = (BureauVote) listBV.getSelectedItem();
+        Faritany f = (Faritany) listFaritany.getSelection();
+        Faritra r = (Faritra) listFaritra.getSelection();
+        Distrika d = (Distrika) listDistrika.getSelection();
+        Depute dep = (Depute) listDepute.getSelection();
+        BureauVote bv = (BureauVote) listBV.getSelection();
         String voteStr = votes.getText().trim();
 
         if (f == null || r == null || d == null || dep == null || bv == null || voteStr.isEmpty()) {

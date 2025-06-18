@@ -1,7 +1,7 @@
 # Faritany|Faritra|Distrika,nbDeputesPeutEtreElus|Depute1,Depute2|BV1,BV2
 Analamanga|Ampitatafika|Antananarivo Atsimondrano,1|C1,C2|BV101
 Analamanga|Ampitatafika|Antananarivo Atsimondrano,1|C1,C2|BV102
-Vakinakaratra|Ambohimena|Antsirabe I,2|C3,C4|BV201
-Vakinakaratra|Ambohimena|Antsirabe I,2|C3,C4|BV202
-Antsinana|Tanambao Verrerie|Toamasina I,2|C5,C6|BV301
-Antsinana|Tanambao Verrerie|Toamasina I,2|C5,C6|BV302
+Vakinakaratra|Ambohimena|Antsirabe I,2|C3;;SuppleantC3,C4;;SuppleantC4|BV201
+Vakinakaratra|Ambohimena|Antsirabe I,2|C3;;SuppleantC3,C4;;SuppleantC4|BV202
+Antsinana|Tanambao Verrerie|Toamasina I,2|C5;;SuppleantC5,C6;;SuppleantC6|BV301
+Antsinana|Tanambao Verrerie|Toamasina I,2|C5;;SuppleantC5,C6;;SuppleantC6|BV302

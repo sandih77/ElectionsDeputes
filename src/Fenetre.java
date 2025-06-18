@@ -6,26 +6,25 @@ import delimitation.Faritany;
 import delimitation.Faritra;
 import elections.BureauVote;
 import button.InsertButton;
+import gui.listeners.ConfirmerListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Fenetre extends JFrame {
 
-    JComboBox<Faritany> listFaritany;
-    JComboBox<Faritra> listFaritra;
-    JComboBox<Distrika> listDistrika;
-    JComboBox<Depute> listDepute;
-    JComboBox<BureauVote> listBV;
+    FileDeroulante listFaritany;
+    FileDeroulante listFaritra;
+    FileDeroulante listDistrika;
+    FileDeroulante listDepute;
+    FileDeroulante listBV;
     JTextField votes;
     InsertButton submit;
-
     JButton btnConfirmer;
-    int etapeSelection = 0; // 0: Faritany, 1: Faritra, 2: Distrika
-
+    int etapeSelection = 0; // 0: Faritany, 1: Faritra, 2: Distrika, 3: fin
     List<Faritany> faritanyList;
 
     public Fenetre() {
@@ -36,7 +35,33 @@ public class Fenetre extends JFrame {
         setLayout(new GridLayout(12, 2, 5, 5));
 
         initializeComponents();
+        layoutComponents();
+        attachListeners();
+    }
 
+    public void initializeComponents() {
+        listFaritany = new FileDeroulante();
+        listFaritra = new FileDeroulante();
+        listDistrika = new FileDeroulante();
+        listDepute = new FileDeroulante();
+        listBV = new FileDeroulante();
+        votes = new JTextField();
+        submit = new InsertButton("Submit", listFaritany, listFaritra, listDistrika, listDepute, listBV, votes);
+
+        btnConfirmer = new JButton("Confirmer Faritany");
+
+        faritanyList = getFaritanyFromFile("data/data.txt");
+        if (faritanyList != null) {
+            listFaritany.remplir(faritanyList.toArray());
+        }
+
+        listFaritra.setEnabled(false);
+        listDistrika.setEnabled(false);
+        listDepute.setEnabled(false);
+        listBV.setEnabled(false);
+    }
+
+    public void layoutComponents() {
         add(new JLabel("Faritany :"));
         add(listFaritany);
         add(new JLabel(""));
@@ -67,144 +92,26 @@ public class Fenetre extends JFrame {
         add(submit);
     }
 
-    public void initializeComponents() {
-        listFaritany = new JComboBox<>();
-        listFaritra = new JComboBox<>();
-        listDistrika = new JComboBox<>();
-        listDepute = new JComboBox<>();
-        listBV = new JComboBox<>();
-        votes = new JTextField();
-        submit = new InsertButton("Submit", listFaritany, listFaritra, listDistrika, listDepute, listBV, votes);
-
-        btnConfirmer = new JButton("Confirmer Faritany");
-
-        // Charger Faritany
-        faritanyList = getFaritanyFromFile("data/data.txt");
-        for (Faritany f : faritanyList) {
-            listFaritany.addItem(f);
-        }
-
-        listFaritra.setEnabled(false);
-        listDistrika.setEnabled(false);
-        listDepute.setEnabled(false);
-        listBV.setEnabled(false);
-
-        btnConfirmer.addActionListener(e -> {
-            switch (etapeSelection) {
-                case 0 -> {
-                    Faritany selectedFaritany = (Faritany) listFaritany.getSelectedItem();
-                    listFaritra.removeAllItems();
-                    listDistrika.removeAllItems();
-                    listDepute.removeAllItems();
-                    listBV.removeAllItems();
-
-                    listFaritra.setEnabled(false);
-                    listDistrika.setEnabled(false);
-                    listDepute.setEnabled(false);
-                    listBV.setEnabled(false);
-
-                    if (selectedFaritany != null) {
-                        for (Faritra f : selectedFaritany.getListFaritra()) {
-                            listFaritra.addItem(f);
-                        }
-                        listFaritra.setEnabled(true);
-                        etapeSelection = 1;
-                        btnConfirmer.setText("Confirmer Faritra");
-                    }
-                }
-                case 1 -> {
-                    Faritra selectedFaritra = (Faritra) listFaritra.getSelectedItem();
-                    listDistrika.removeAllItems();
-                    listDepute.removeAllItems();
-                    listBV.removeAllItems();
-
-                    listDistrika.setEnabled(false);
-                    listDepute.setEnabled(false);
-                    listBV.setEnabled(false);
-
-                    if (selectedFaritra != null) {
-                        for (Distrika d : selectedFaritra.getListDistrika()) {
-                            listDistrika.addItem(d);
-                        }
-                        listDistrika.setEnabled(true);
-                        etapeSelection = 2;
-                        btnConfirmer.setText("Confirmer Distrika");
-                    }
-                }
-                case 2 -> {
-                    Distrika selectedDistrika = (Distrika) listDistrika.getSelectedItem();
-                    listDepute.removeAllItems();
-                    listBV.removeAllItems();
-
-                    listDepute.setEnabled(false);
-                    listBV.setEnabled(false);
-
-                    if (selectedDistrika != null) {
-                        for (Depute d : selectedDistrika.getDeputeDistrika()) {
-                            listDepute.addItem(d);
-                        }
-                        listDepute.setEnabled(true);
-
-                        List<BureauVote> bureaux = getBureauxFromDistrika(selectedDistrika);
-                        for (BureauVote b : bureaux) {
-                            listBV.addItem(b);
-                        }
-                        listBV.setEnabled(true);
-
-                        etapeSelection = 3;
-                        btnConfirmer.setText("Reinitialiser");
-                    }
-                }
-
-                case 3 -> {
-                    listFaritra.removeAllItems();
-                    listDistrika.removeAllItems();
-                    listDepute.removeAllItems();
-                    listBV.removeAllItems();
-
-                    listFaritra.setEnabled(false);
-                    listDistrika.setEnabled(false);
-                    listDepute.setEnabled(false);
-                    listBV.setEnabled(false);
-
-                    etapeSelection = 0;
-                    btnConfirmer.setText("Confirmer Faritany");
-                }
-
-            }
-        });
+    public void attachListeners() {
+        btnConfirmer.addActionListener(new ConfirmerListener(this));
     }
 
-    public List<BureauVote> getBureauxFromDistrika(Distrika d) {
-        return List.of(
-                new BureauVote("BV 1 - " + d.getNomDistrika(), d.getDeputeDistrika(), d),
-                new BureauVote("BV 2 - " + d.getNomDistrika(), d.getDeputeDistrika(), d)
-        );
-    }
-
+    // Méthode pour récupérer Faritany depuis fichier
     public List<Faritany> getFaritanyFromFile(String filename) {
         List<Faritany> faritanyList = new ArrayList<>();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
-
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#") || line.isBlank()) {
-                    continue;
-                }
+                if (line.startsWith("#") || line.isBlank()) continue;
 
                 String[] parts = line.split("\\|");
-                if (parts.length < 5) {
-                    continue;
-                }
+                if (parts.length < 5) continue;
 
                 String nomFaritany = parts[0].trim();
                 String nomFaritra = parts[1].trim();
 
                 String[] distrikaInfo = parts[2].trim().split(",");
-                if (distrikaInfo.length != 2) {
-                    continue;
-                }
+                if (distrikaInfo.length != 2) continue;
 
                 String nomDistrika = distrikaInfo[0].trim();
                 int nbDeputes = Integer.parseInt(distrikaInfo[1].trim());
@@ -216,20 +123,18 @@ public class Fenetre extends JFrame {
                     String nomTitulaire = couple[0].trim();
                     Depute second = null;
                     if (couple.length > 1) {
-                        String nomSecond = couple[1].trim();
-                        second = new Depute(nomSecond, null, null);
+                        second = new Depute(couple[1].trim(), null, null);
                     }
-                    Depute titulaire = new Depute(nomTitulaire, second, null);
-                    deputes.add(titulaire);
+                    deputes.add(new Depute(nomTitulaire, second, null));
                 }
 
                 String[] nomBureaux = parts[4].trim().split(",");
                 List<BureauVote> bureaux = new ArrayList<>();
                 for (String nomBV : nomBureaux) {
-                    BureauVote bv = new BureauVote(nomBV.trim(), deputes, null);
-                    bureaux.add(bv);
+                    bureaux.add(new BureauVote(nomBV.trim(), deputes, null));
                 }
 
+                // Chercher ou créer Faritany
                 Faritany faritany = faritanyList.stream()
                         .filter(f -> f.getNomFaritany().equalsIgnoreCase(nomFaritany))
                         .findFirst()
@@ -239,6 +144,7 @@ public class Fenetre extends JFrame {
                             return f;
                         });
 
+                // Chercher ou créer Faritra
                 Faritra faritra = faritany.getListFaritra().stream()
                         .filter(f -> f.getNomFaritra().equalsIgnoreCase(nomFaritra))
                         .findFirst()
@@ -257,7 +163,6 @@ public class Fenetre extends JFrame {
                         d.getSecondMembre().setDistrikaCandidat(distrika);
                     }
                 }
-
                 for (BureauVote bv : bureaux) {
                     bv.setDistrika(distrika);
                 }
@@ -265,7 +170,38 @@ public class Fenetre extends JFrame {
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
-
         return faritanyList;
+    }
+
+    public int getEtapeSelection() {
+        return etapeSelection;
+    }
+
+    public void setEtapeSelection(int etapeSelection) {
+        this.etapeSelection = etapeSelection;
+    }
+
+    public FileDeroulante getListFaritany() {
+        return listFaritany;
+    }
+
+    public FileDeroulante getListFaritra() {
+        return listFaritra;
+    }
+
+    public FileDeroulante getListDistrika() {
+        return listDistrika;
+    }
+
+    public FileDeroulante getListDepute() {
+        return listDepute;
+    }
+
+    public FileDeroulante getListBV() {
+        return listBV;
+    }
+
+    public JButton getBtnConfirmer() {
+        return btnConfirmer;
     }
 }
