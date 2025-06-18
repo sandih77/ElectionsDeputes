@@ -5,19 +5,27 @@ public class Vote {
     String faritany;
     String faritra;
     String distrika;
-    String depute;
+    String titulaire;
+    String suppleant;
     String bureauVote;
     int nbCandidatDeputesPeutEtreElus;
-    int nombre;
+    int nombreVotes;
 
-    public Vote(String faritany, String faritra, String distrika, String depute, String bureauVote, int c, int nombre) {
+    public Vote(String faritany, String faritra, String distrika, String candidat, String bureauVote, int nbElus, int nombreVotes) {
         this.faritany = faritany;
         this.faritra = faritra;
         this.distrika = distrika;
-        this.depute = depute;
         this.bureauVote = bureauVote;
-        this.nombre = nombre;
-        this.nbCandidatDeputesPeutEtreElus = c;
+        this.nbCandidatDeputesPeutEtreElus = nbElus;
+        this.nombreVotes = nombreVotes;
+
+        String[] split = candidat.split(":");
+        this.titulaire = split[0].trim();
+        if (split.length > 1) {
+            this.suppleant = split[1].trim();
+        } else {
+            this.suppleant = "";
+        }
     }
 
     public String getFaritany() {
@@ -32,8 +40,12 @@ public class Vote {
         return distrika;
     }
 
-    public String getDepute() {
-        return depute;
+    public String getTitulaire() {
+        return titulaire;
+    }
+
+    public String getSecond() {
+        return suppleant;
     }
 
     public String getBureauVote() {
@@ -41,10 +53,10 @@ public class Vote {
     }
 
     public int getNombre() {
-        return nombre;
+        return nombreVotes;
     }
 
     public int getPeutEtreElus() {
-        return this.nbCandidatDeputesPeutEtreElus;
+        return nbCandidatDeputesPeutEtreElus;
     }
 }

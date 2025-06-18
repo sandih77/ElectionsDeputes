@@ -136,7 +136,6 @@ public class Fenetre extends JFrame {
                 String nomDistrika = distrikaInfo[0].trim();
                 int nbDeputes = Integer.parseInt(distrikaInfo[1].trim());
 
-                // === Création des Députés avec second membre ===
                 String[] nomDeputesBruts = parts[3].trim().split(",");
                 List<Depute> deputes = new ArrayList<>();
 
@@ -154,15 +153,13 @@ public class Fenetre extends JFrame {
                     deputes.add(titulaire);
                 }
 
-                // === Création des bureaux de vote ===
                 String[] nomBureaux = parts[4].trim().split(",");
                 List<BureauVote> bureaux = new ArrayList<>();
                 for (String nomBV : nomBureaux) {
-                    BureauVote bv = new BureauVote(nomBV.trim(), deputes, null); // Distrika assigné plus tard
+                    BureauVote bv = new BureauVote(nomBV.trim(), deputes, null);
                     bureaux.add(bv);
                 }
 
-                // === Recherche ou création de Faritany ===
                 Faritany faritany = null;
                 for (Faritany f : faritanyList) {
                     if (f.getNomFaritany().equalsIgnoreCase(nomFaritany)) {
@@ -175,7 +172,6 @@ public class Fenetre extends JFrame {
                     faritanyList.add(faritany);
                 }
 
-                // === Recherche ou création de Faritra ===
                 Faritra faritra = null;
                 for (Faritra f : faritany.getListFaritra()) {
                     if (f.getNomFaritra().equalsIgnoreCase(nomFaritra)) {
@@ -188,11 +184,9 @@ public class Fenetre extends JFrame {
                     faritany.getListFaritra().add(faritra);
                 }
 
-                // === Création de Distrika ===
                 Distrika distrika = new Distrika(nomDistrika, faritra, deputes, nbDeputes);
                 faritra.getListDistrika().add(distrika);
 
-                // === Association des députés et leurs seconds au Distrika ===
                 for (Depute d : deputes) {
                     d.setDistrikaCandidat(distrika);
                     if (d.getSecondMembre() != null) {
@@ -200,9 +194,8 @@ public class Fenetre extends JFrame {
                     }
                 }
 
-                // === Mise à jour des bureaux avec le Distrika ===
                 for (BureauVote bv : bureaux) {
-                    bv.setDistrika(distrika); // suppose que tu as un setter ou constructeur adapté
+                    bv.setDistrika(distrika); 
                 }
             }
         } catch (IOException | NumberFormatException e) {

@@ -1,14 +1,9 @@
 package elections;
 
-import javax.swing.JComboBox;
 import java.io.*;
 import java.util.*;
 
 public class Result {
-
-    JComboBox listFaritany;
-    JComboBox listFaritra;
-    JComboBox listDistrika;
 
     public List<Vote> lireVotes(String filename) {
         List<Vote> liste = new ArrayList<>();
@@ -21,19 +16,20 @@ public class Result {
                 }
 
                 String[] parts = ligne.split("\\|");
-                if (parts.length != 6) {
+                if (parts.length != 7) {
+                    System.err.println("Ligne invalide : " + ligne);
                     continue;
                 }
 
-                String f = parts[0].trim();
-                String r = parts[1].trim();
-                String d = parts[2].trim();
-                String dep = parts[3].trim();
-                int nbPeutetreElus = Integer.parseInt(parts[4].trim());
+                String f = parts[0].trim();               
+                String r = parts[1].trim();               
+                String d = parts[2].trim();               
+                int nbPeutetreElus = Integer.parseInt(parts[3].trim());
+                String deputeStr = parts[4].trim();       
                 String bv = parts[5].trim();
                 int n = Integer.parseInt(parts[6].trim());
 
-                liste.add(new Vote(f, r, d, dep, bv, nbPeutetreElus, n));
+                liste.add(new Vote(f, r, d, deputeStr, bv, nbPeutetreElus, n));
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
@@ -53,50 +49,65 @@ public class Result {
     }
 
     public List<Vote> filtrerVotesParDistrika(List<Vote> votes, String distrika) {
-        List<Vote> filtrés = new ArrayList<>();
+        List<Vote> filtres = new ArrayList<>();
         for (Vote v : votes) {
             if (v.getDistrika().equalsIgnoreCase(distrika)) {
-                filtrés.add(v);
+                filtres.add(v);
             }
         }
-        return filtrés;
+        return filtres;
     }
 
     public String trouverEluDansDistrika(List<Vote> votesDuDistrika) {
-        List<String> deputes = new ArrayList<>();
+        List<String> titulaires = new ArrayList<>();
+        List<String> suppleants = new ArrayList<>();
         List<Integer> scores = new ArrayList<>();
 
+        if (votesDuDistrika.isEmpty()) {
+            return "Aucun vote trouvé";
+        }
+
+        int nbElus = votesDuDistrika.get(0).getPeutEtreElus();
+
         for (Vote v : votesDuDistrika) {
-            int index = deputes.indexOf(v.getDepute());
+            String nom = v.getTitulaire();
+            int index = titulaires.indexOf(nom);
             if (index == -1) {
-                deputes.add(v.getDepute());
+                titulaires.add(nom);
+                suppleants.add(v.getSecond());
                 scores.add(v.getNombre());
             } else {
                 scores.set(index, scores.get(index) + v.getNombre());
             }
         }
 
-        int max = -1;
-        String elu = "";
-        for (int i = 0; i < deputes.size(); i++) {
-            if (scores.get(i) > max) {
-                max = scores.get(i);
-                elu = deputes.get(i);
+        if (titulaires.isEmpty()) {
+            return "Aucun vote trouvé";
+        }
+
+        int first = -1, second = -1;
+        for (int i = 0; i < scores.size(); i++) {
+            if (first == -1 || scores.get(i) > scores.get(first)) {
+                second = first;
+                first = i;
+            } else if (second == -1 || scores.get(i) > scores.get(second)) {
+                second = i;
             }
         }
 
-        return elu + " (" + max + " votes)";
-    }
+        if (nbElus == 1 || second == -1) {
+            return titulaires.get(first) + " (" + scores.get(first) + " votes)";
+        }
 
-    public void afficherElusParDistrika(String filename) {
-        List<Vote> tousLesVotes = lireVotes(filename);
-        List<String> distrikas = getNomsDistrika(tousLesVotes);
+        int votePremier = scores.get(first);
+        int voteSecond = scores.get(second);
 
-        System.out.println("=== Résultats par Distrika ===");
-        for (String d : distrikas) {
-            List<Vote> votesDuDistrika = filtrerVotesParDistrika(tousLesVotes, d);
-            String elu = trouverEluDansDistrika(votesDuDistrika);
-            System.out.println("Distrika : " + d + " => Élu : " + elu);
+        if (voteSecond * 2 >= votePremier) {
+            return titulaires.get(first) + " (" + votePremier + " votes) et " +
+                   titulaires.get(second) + " (" + voteSecond + " votes)";
+        } else {
+            return titulaires.get(first) + " (" + votePremier + " votes) et son suppléant " +
+                   suppleants.get(first);
         }
     }
 

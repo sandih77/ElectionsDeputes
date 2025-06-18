@@ -65,7 +65,7 @@ public class InsertButton extends JButton {
                 r.getNomFaritra(),
                 d.getNomDistrika(),
                 String.valueOf(d.getNbDeputes()),
-                dep.getNomDepute(),
+                dep.getNomDepute() + ":" + (dep.getSecondMembre() != null ? dep.getSecondMembre().getNomDepute() : "Aucun"),
                 bv.getNomBV(),
                 String.valueOf(nbVotes)
         );

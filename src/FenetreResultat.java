@@ -2,9 +2,10 @@ package gui;
 
 import elections.Result;
 import elections.Vote;
+
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
-import javax.swing.*;
 
 public class FenetreResultat extends JFrame {
 
@@ -66,14 +67,14 @@ public class FenetreResultat extends JFrame {
             if (distrika != null && !distrika.isBlank()) {
                 List<Vote> votes = resultUtil.filtrerVotesParDistrika(allVotes, distrika);
                 String elu = resultUtil.trouverEluDansDistrika(votes);
-                resultat += "Distrika : " + distrika + " → Élu : " + elu + "\n";
+                resultat += "Distrika : " + distrika + " → Élu(s) : " + elu + "\n";
 
             } else if (faritra != null && !faritra.isBlank()) {
                 List<String> distrikas = resultUtil.getNomsDistrikaDansFaritra(allVotes, faritany, faritra);
                 for (String d : distrikas) {
                     List<Vote> votes = resultUtil.filtrerVotesParDistrika(allVotes, d);
                     String elu = resultUtil.trouverEluDansDistrika(votes);
-                    resultat += "Distrika : " + d + " → Élu : " + elu + "\n";
+                    resultat += "Distrika : " + d + " → Élu(s) : " + elu + "\n";
                 }
 
             } else if (faritany != null && !faritany.isBlank()) {
@@ -83,7 +84,7 @@ public class FenetreResultat extends JFrame {
                     for (String d : distrikas) {
                         List<Vote> votes = resultUtil.filtrerVotesParDistrika(allVotes, d);
                         String elu = resultUtil.trouverEluDansDistrika(votes);
-                        resultat += "Distrika : " + d + " → Élu : " + elu + "\n";
+                        resultat += "Distrika : " + d + " → Élu(s) : " + elu + "\n";
                     }
                 }
 
