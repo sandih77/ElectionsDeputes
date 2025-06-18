@@ -23,7 +23,7 @@ public class Distrika {
 
     @Override
     public String toString() {
-        return nom;
+        return this.nom;
     }
 
     public Faritra getFaritraDistrika() {

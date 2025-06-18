@@ -29,34 +29,34 @@ public class Vote {
     }
 
     public String getFaritany() {
-        return faritany;
+        return this.faritany;
     }
 
     public String getFaritra() {
-        return faritra;
+        return this.faritra;
     }
 
     public String getDistrika() {
-        return distrika;
+        return this.distrika;
     }
 
     public String getTitulaire() {
-        return titulaire;
+        return this.titulaire;
     }
 
     public String getSecond() {
-        return suppleant;
+        return this.suppleant;
     }
 
     public String getBureauVote() {
-        return bureauVote;
+        return this.bureauVote;
     }
 
-    public int getNombre() {
-        return nombreVotes;
+    public int getNombreVote() {
+        return this.nombreVotes;
     }
 
     public int getPeutEtreElus() {
-        return nbCandidatDeputesPeutEtreElus;
+        return this.nbCandidatDeputesPeutEtreElus;
     }
 }

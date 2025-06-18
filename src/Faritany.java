@@ -22,6 +22,6 @@ public class Faritany {
 
     @Override
     public String toString() {
-        return nom;
+        return this.nom;
     }
 }

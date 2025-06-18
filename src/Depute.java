@@ -32,6 +32,6 @@ public class Depute {
 
     @Override
     public String toString() {
-        return nom;
+        return this.nom;
     }
 }

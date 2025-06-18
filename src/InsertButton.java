@@ -11,12 +11,12 @@ import java.io.*;
 
 public class InsertButton extends JButton {
 
-    private final JComboBox<Faritany> listFaritany;
-    private final JComboBox<Faritra> listFaritra;
-    private final JComboBox<Distrika> listDistrika;
-    private final JComboBox<Depute> listDepute;
-    private final JComboBox<BureauVote> listBV;
-    private final JTextField votes;
+    JComboBox<Faritany> listFaritany;
+    JComboBox<Faritra> listFaritra;
+    JComboBox<Distrika> listDistrika;
+    JComboBox<Depute> listDepute;
+    JComboBox<BureauVote> listBV;
+    JTextField votes;
 
     public InsertButton(String label,
             JComboBox<Faritany> listFaritany,

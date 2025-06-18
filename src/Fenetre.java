@@ -23,27 +23,45 @@ public class Fenetre extends JFrame {
     JTextField votes;
     InsertButton submit;
 
+    JButton btnConfirmerFaritany;
+    JButton btnConfirmerFaritra;
+    JButton btnConfirmerDistrika;
+
+    List<Faritany> faritanyList;
+
     public Fenetre() {
         setTitle("Election deputes");
-        setSize(500, 300);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(7, 2));
+        setLayout(new GridLayout(10, 2, 5, 5));
 
         initializeComponents();
 
         add(new JLabel("Faritany :"));
         add(listFaritany);
+        add(btnConfirmerFaritany);
+        add(new JLabel("")); 
+
         add(new JLabel("Faritra :"));
         add(listFaritra);
+        add(btnConfirmerFaritra);
+        add(new JLabel(""));
+
         add(new JLabel("Distrika :"));
         add(listDistrika);
+        add(btnConfirmerDistrika);
+        add(new JLabel(""));
+
         add(new JLabel("Depute :"));
         add(listDepute);
+
         add(new JLabel("Bureau de vote :"));
         add(listBV);
+
         add(new JLabel("Vote :"));
         add(votes);
+
         add(submit);
     }
 
@@ -56,56 +74,114 @@ public class Fenetre extends JFrame {
         votes = new JTextField();
         submit = new InsertButton("Submit", listFaritany, listFaritra, listDistrika, listDepute, listBV, votes);
 
-        List<Faritany> faritanyList = getFaritanyFromFile("data/data.txt");
+        btnConfirmerFaritany = new JButton("Confirmer Faritany");
+        btnConfirmerFaritra = new JButton("Confirmer Faritra");
+        btnConfirmerDistrika = new JButton("Confirmer Distrika");
 
+        // Chargement initial Faritany
+        faritanyList = getFaritanyFromFile("data/data.txt");
         for (Faritany f : faritanyList) {
             listFaritany.addItem(f);
         }
 
-        listFaritany.addActionListener(e -> {
+        // On désactive les combos suivants au départ
+        listFaritra.setEnabled(false);
+        listDistrika.setEnabled(false);
+        listDepute.setEnabled(false);
+        listBV.setEnabled(false);
+
+        btnConfirmerFaritra.setEnabled(false);
+        btnConfirmerDistrika.setEnabled(false);
+
+        // Bouton Confirmer Faritany : charge Faritra correspondants
+        btnConfirmerFaritany.addActionListener(e -> {
             Faritany selectedFaritany = (Faritany) listFaritany.getSelectedItem();
+
             listFaritra.removeAllItems();
+            listDistrika.removeAllItems();
+            listDepute.removeAllItems();
+            listBV.removeAllItems();
+
+            listDepute.setEnabled(false);
+            listBV.setEnabled(false);
+
             if (selectedFaritany != null && selectedFaritany.getListFaritra() != null) {
                 for (Faritra f : selectedFaritany.getListFaritra()) {
                     listFaritra.addItem(f);
                 }
+                listFaritra.setEnabled(true);
+                btnConfirmerFaritra.setEnabled(true);
+            } else {
+                listFaritra.setEnabled(false);
+                btnConfirmerFaritra.setEnabled(false);
             }
+
+            listDistrika.setEnabled(false);
+            btnConfirmerDistrika.setEnabled(false);
+        });
+
+        // Bouton Confirmer Faritra : charge Distrika correspondants
+        btnConfirmerFaritra.addActionListener(e -> {
+            Faritra selectedFaritra = (Faritra) listFaritra.getSelectedItem();
+
             listDistrika.removeAllItems();
             listDepute.removeAllItems();
             listBV.removeAllItems();
-        });
 
-        listFaritra.addActionListener(e -> {
-            Faritra selectedFaritra = (Faritra) listFaritra.getSelectedItem();
-            listDistrika.removeAllItems();
+            listDepute.setEnabled(false);
+            listBV.setEnabled(false);
+
             if (selectedFaritra != null && selectedFaritra.getListDistrika() != null) {
                 for (Distrika d : selectedFaritra.getListDistrika()) {
                     listDistrika.addItem(d);
                 }
+                listDistrika.setEnabled(true);
+                btnConfirmerDistrika.setEnabled(true);
+            } else {
+                listDistrika.setEnabled(false);
+                btnConfirmerDistrika.setEnabled(false);
             }
-            listDepute.removeAllItems();
-            listBV.removeAllItems();
         });
 
-        listDistrika.addActionListener(e -> {
+        // Bouton Confirmer Distrika : charge Depute et BV correspondants
+        btnConfirmerDistrika.addActionListener(e -> {
             Distrika selectedDistrika = (Distrika) listDistrika.getSelectedItem();
+
             listDepute.removeAllItems();
             listBV.removeAllItems();
-            if (selectedDistrika != null && selectedDistrika.getDeputeDistrika() != null) {
-                for (Depute d : selectedDistrika.getDeputeDistrika()) {
-                    listDepute.addItem(d);
+
+            if (selectedDistrika != null) {
+                // Charge députés
+                if (selectedDistrika.getDeputeDistrika() != null) {
+                    for (Depute d : selectedDistrika.getDeputeDistrika()) {
+                        listDepute.addItem(d);
+                    }
+                    listDepute.setEnabled(true);
+                } else {
+                    listDepute.setEnabled(false);
                 }
-                for (BureauVote b : getBureauxFromDistrika(selectedDistrika)) {
-                    listBV.addItem(b);
+
+                // Charge bureaux de vote
+                List<BureauVote> bureaux = getBureauxFromDistrika(selectedDistrika);
+                if (!bureaux.isEmpty()) {
+                    for (BureauVote b : bureaux) {
+                        listBV.addItem(b);
+                    }
+                    listBV.setEnabled(true);
+                } else {
+                    listBV.setEnabled(false);
                 }
+            } else {
+                listDepute.setEnabled(false);
+                listBV.setEnabled(false);
             }
         });
     }
 
     public List<BureauVote> getBureauxFromDistrika(Distrika d) {
         return List.of(
-                new BureauVote("BV 1 - " + d.getNomDistrika(), d.getDeputeDistrika(), d),
-                new BureauVote("BV 2 - " + d.getNomDistrika(), d.getDeputeDistrika(), d)
+            new BureauVote("BV 1 - " + d.getNomDistrika(), d.getDeputeDistrika(), d),
+            new BureauVote("BV 2 - " + d.getNomDistrika(), d.getDeputeDistrika(), d)
         );
     }
 
@@ -160,6 +236,7 @@ public class Fenetre extends JFrame {
                     bureaux.add(bv);
                 }
 
+                // Chercher Faritany déjà existant sinon créer
                 Faritany faritany = null;
                 for (Faritany f : faritanyList) {
                     if (f.getNomFaritany().equalsIgnoreCase(nomFaritany)) {
@@ -172,6 +249,7 @@ public class Fenetre extends JFrame {
                     faritanyList.add(faritany);
                 }
 
+                // Chercher Faritra dans ce Faritany sinon créer
                 Faritra faritra = null;
                 for (Faritra f : faritany.getListFaritra()) {
                     if (f.getNomFaritra().equalsIgnoreCase(nomFaritra)) {
@@ -184,9 +262,11 @@ public class Fenetre extends JFrame {
                     faritany.getListFaritra().add(faritra);
                 }
 
+                // Ajouter le distrika
                 Distrika distrika = new Distrika(nomDistrika, faritra, deputes, nbDeputes);
                 faritra.getListDistrika().add(distrika);
 
+                // Lier députés au distrika
                 for (Depute d : deputes) {
                     d.setDistrikaCandidat(distrika);
                     if (d.getSecondMembre() != null) {
@@ -194,8 +274,9 @@ public class Fenetre extends JFrame {
                     }
                 }
 
+                // Lier bureaux au distrika
                 for (BureauVote bv : bureaux) {
-                    bv.setDistrika(distrika); 
+                    bv.setDistrika(distrika);
                 }
             }
         } catch (IOException | NumberFormatException e) {

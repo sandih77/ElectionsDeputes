@@ -4,4 +4,8 @@ Antananarivo|Analamanga|Antananarivo I|1|Rabe:Aucun|BV 2 - Antananarivo I|230
 Antananarivo|Analamanga|Antananarivo I|1|Rabe:Aucun|BV 1 - Antananarivo I|140
 Antananarivo|Analamanga|Antananarivo II|2|Rakotobe:Bema|BV 1 - Antananarivo II|265
 Antananarivo|Analamanga|Antananarivo II|2|Rakoto:Be|BV 1 - Antananarivo II|100
-Antananarivo|Analamanga|Antananarivo II|2|Rasoa:Soa|BV 1 - Antananarivo II|150
+Antananarivo|Itasy|Itasy I|2|Rasoa:Soa|BV 1 - Itasy I|150
+Antananarivo|Itasy|Itasy I|2|Rakotobe:Bema|BV 1 - Itasy I|265
+Antananarivo|Itasy|Itasy II|2|Rakoto:Be|BV 1 - Itasy II|100
+Antananarivo|Itasy|Itasy II|2|Rasoa:Soa|BV 1 - Itasy II|150
+Mahajanga|Mahajanga|Mahajanga II|2|Rasoa:Soa|BV 1 - Mahajanga II|150

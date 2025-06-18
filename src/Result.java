@@ -64,7 +64,7 @@ public class Result {
         List<Integer> scores = new ArrayList<>();
 
         if (votesDuDistrika.isEmpty()) {
-            return "Aucun vote trouvé";
+            return "Aucun vote trouve";
         }
 
         int nbElus = votesDuDistrika.get(0).getPeutEtreElus();
@@ -75,14 +75,14 @@ public class Result {
             if (index == -1) {
                 titulaires.add(nom);
                 suppleants.add(v.getSecond());
-                scores.add(v.getNombre());
+                scores.add(v.getNombreVote());
             } else {
-                scores.set(index, scores.get(index) + v.getNombre());
+                scores.set(index, scores.get(index) + v.getNombreVote());
             }
         }
 
         if (titulaires.isEmpty()) {
-            return "Aucun vote trouvé";
+            return "Aucun vote trouve";
         }
 
         int first = -1, second = -1;
@@ -106,7 +106,7 @@ public class Result {
             return titulaires.get(first) + " (" + votePremier + " votes) et " +
                    titulaires.get(second) + " (" + voteSecond + " votes)";
         } else {
-            return titulaires.get(first) + " (" + votePremier + " votes) et son suppléant " +
+            return titulaires.get(first) + " (" + votePremier + " votes) et son suppleant " +
                    suppleants.get(first);
         }
     }
