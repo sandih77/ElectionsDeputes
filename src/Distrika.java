@@ -8,13 +8,13 @@ public class Distrika {
     String nom;
     Faritra faritra;
     List<Depute> listDeputes;
-    int nbDeputes;
+    int nbCandidatDeputesPeutEtreElus;
 
-    public Distrika(String nom, Faritra faritra, List<Depute> listDeputes, int nbDeputes) {
+    public Distrika(String nom, Faritra faritra, List<Depute> listDeputes, int nbCandidatDeputesPeutEtreElus) {
         this.nom = nom;
         this.faritra = faritra;
         this.listDeputes = listDeputes;
-        this.nbDeputes = nbDeputes;
+        this.nbCandidatDeputesPeutEtreElus = nbCandidatDeputesPeutEtreElus;
     }
 
     public String getNomDistrika() {
@@ -35,7 +35,7 @@ public class Distrika {
     }
 
     public int getNbDeputes() {
-        return this.nbDeputes;
+        return this.nbCandidatDeputesPeutEtreElus;
     }
 
     public List<Depute> getDeputeDistrika() {

@@ -10,7 +10,6 @@ public class Result {
     JComboBox listFaritra;
     JComboBox listDistrika;
 
-    // 1. Lire tous les votes depuis le fichier
     public List<Vote> lireVotes(String filename) {
         List<Vote> liste = new ArrayList<>();
 
@@ -30,10 +29,11 @@ public class Result {
                 String r = parts[1].trim();
                 String d = parts[2].trim();
                 String dep = parts[3].trim();
-                String bv = parts[4].trim();
-                int n = Integer.parseInt(parts[5].trim());
+                int nbPeutetreElus = Integer.parseInt(parts[4].trim());
+                String bv = parts[5].trim();
+                int n = Integer.parseInt(parts[6].trim());
 
-                liste.add(new Vote(f, r, d, dep, bv, n));
+                liste.add(new Vote(f, r, d, dep, bv, nbPeutetreElus, n));
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
@@ -42,7 +42,6 @@ public class Result {
         return liste;
     }
 
-    // 2. Récupère tous les noms de distrika sans doublons
     public List<String> getNomsDistrika(List<Vote> votes) {
         List<String> noms = new ArrayList<>();
         for (Vote v : votes) {
@@ -53,7 +52,6 @@ public class Result {
         return noms;
     }
 
-    // 3. Filtre les votes pour un distrika donné
     public List<Vote> filtrerVotesParDistrika(List<Vote> votes, String distrika) {
         List<Vote> filtrés = new ArrayList<>();
         for (Vote v : votes) {
@@ -64,7 +62,6 @@ public class Result {
         return filtrés;
     }
 
-    // 4. Trouver l'élu dans un distrika donné (le député avec le plus de votes)
     public String trouverEluDansDistrika(List<Vote> votesDuDistrika) {
         List<String> deputes = new ArrayList<>();
         List<Integer> scores = new ArrayList<>();
@@ -91,7 +88,6 @@ public class Result {
         return elu + " (" + max + " votes)";
     }
 
-    // 5. Affiche tous les élus pour chaque distrika
     public void afficherElusParDistrika(String filename) {
         List<Vote> tousLesVotes = lireVotes(filename);
         List<String> distrikas = getNomsDistrika(tousLesVotes);
@@ -104,7 +100,6 @@ public class Result {
         }
     }
 
-    // Renvoyer liste Faritany
     public List<String> getNomsFaritany(List<Vote> votes) {
         List<String> noms = new ArrayList<>();
         for (Vote v : votes) {
@@ -115,7 +110,6 @@ public class Result {
         return noms;
     }
 
-// Faritra dans Faritany
     public List<String> getNomsFaritraDansFaritany(List<Vote> votes, String faritany) {
         List<String> noms = new ArrayList<>();
         for (Vote v : votes) {
@@ -126,7 +120,6 @@ public class Result {
         return noms;
     }
 
-// Distrika dans Faritra
     public List<String> getNomsDistrikaDansFaritra(List<Vote> votes, String faritany, String faritra) {
         List<String> noms = new ArrayList<>();
         for (Vote v : votes) {

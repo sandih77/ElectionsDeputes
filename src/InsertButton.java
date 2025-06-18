@@ -11,12 +11,12 @@ import java.io.*;
 
 public class InsertButton extends JButton {
 
-    JComboBox<Faritany> listFaritany;
-    JComboBox<Faritra> listFaritra;
-    JComboBox<Distrika> listDistrika;
-    JComboBox<Depute> listDepute;
-    JComboBox<BureauVote> listBV;
-    JTextField votes;
+    private final JComboBox<Faritany> listFaritany;
+    private final JComboBox<Faritra> listFaritra;
+    private final JComboBox<Distrika> listDistrika;
+    private final JComboBox<Depute> listDepute;
+    private final JComboBox<BureauVote> listBV;
+    private final JTextField votes;
 
     public InsertButton(String label,
             JComboBox<Faritany> listFaritany,
@@ -36,33 +36,47 @@ public class InsertButton extends JButton {
         addActionListener(e -> saveVoteToFile("data/votes.txt"));
     }
 
-    public void saveVoteToFile(String filename) {
+    private void saveVoteToFile(String filename) {
         Faritany f = (Faritany) listFaritany.getSelectedItem();
         Faritra r = (Faritra) listFaritra.getSelectedItem();
         Distrika d = (Distrika) listDistrika.getSelectedItem();
         Depute dep = (Depute) listDepute.getSelectedItem();
         BureauVote bv = (BureauVote) listBV.getSelectedItem();
-        String voteStr = votes.getText();
+        String voteStr = votes.getText().trim();
 
         if (f == null || r == null || d == null || dep == null || bv == null || voteStr.isEmpty()) {
-            System.out.println("Case vide");
+            JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.", "Champ vide", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        String line = f.getNomFaritany() + "|"
-                + r.getNomFaritra() + "|"
-                + d.getNomDistrika() + "|"
-                + dep.getNomDepute() + "|"
-                + bv.getNomBV() + "|"
-                + voteStr;
+        int nbVotes;
+        try {
+            nbVotes = Integer.parseInt(voteStr);
+            if (nbVotes < 0) {
+                throw new NumberFormatException("Nombre négatif");
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Veuillez entrer un nombre de votes valide (entier positif).", "Erreur de saisie", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String line = String.join("|",
+                f.getNomFaritany(),
+                r.getNomFaritra(),
+                d.getNomDistrika(),
+                String.valueOf(d.getNbDeputes()),
+                dep.getNomDepute(),
+                bv.getNomBV(),
+                String.valueOf(nbVotes)
+        );
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
             writer.write(line);
             writer.newLine();
-            System.out.println("Vote enregistre");
+            JOptionPane.showMessageDialog(this, "Vote enregistré avec succès !", "Succès", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Erreur lors de l'enregistrement du vote : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            System.out.println("Erreur enregistrement de vote");
         }
     }
 }

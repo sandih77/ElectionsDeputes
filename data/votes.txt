@@ -1,6 +1,3 @@
-Antananarivo|Analamanga|Antananarivo I|Rabe|BV 1 - Antananarivo I|150
-Antananarivo|Analamanga|Antananarivo I|Rakoto|BV 1 - Antananarivo I|200
-Antananarivo|Analamanga|Antananarivo I|Rakoto|BV 2 - Antananarivo I|100
-Antananarivo|Bongolava|Bongolava I|Rabe|BV 1 - Bongolava I|140
-Antananarivo|Bongolava|Bongolava II|Rakotobe|BV 1 - Bongolava II|250
-Antananarivo|Analamanga|Antananarivo II|Rakotobe|BV 1 - Antananarivo II|144
+Antananarivo|Analamanga|Antananarivo I|1|Rakoto|BV 1 - Antananarivo I|150
+Antananarivo|Analamanga|Antananarivo II|2|Rakotobe|BV 1 - Antananarivo II|54
+Antananarivo|Analamanga|Antananarivo II|2|Rakotobe|BV 1 - Antananarivo II|178

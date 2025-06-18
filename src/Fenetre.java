@@ -125,66 +125,87 @@ public class Fenetre extends JFrame {
                     continue;
                 }
 
-                String faritanyNom = parts[0].trim();
-                String faritraNom = parts[1].trim();
-                String distrikaNom = parts[2].trim();
+                String nomFaritany = parts[0].trim();
+                String nomFaritra = parts[1].trim();
 
-                // Création liste deputes
-                String[] deputesNames = parts[3].split(",");
+                String[] distrikaInfo = parts[2].trim().split(",");
+                if (distrikaInfo.length != 2) {
+                    continue;
+                }
+
+                String nomDistrika = distrikaInfo[0].trim();
+                int nbDeputes = Integer.parseInt(distrikaInfo[1].trim());
+
+                // === Création des Députés avec second membre ===
+                String[] nomDeputesBruts = parts[3].trim().split(",");
                 List<Depute> deputes = new ArrayList<>();
-                for (int i = 0; i < deputesNames.length; i++) {
-                    deputes.add(new Depute(deputesNames[i].trim(), null));
+
+                for (String nomBrut : nomDeputesBruts) {
+                    String[] couple = nomBrut.trim().split(";;");
+                    String nomTitulaire = couple[0].trim();
+                    Depute second = null;
+
+                    if (couple.length > 1) {
+                        String nomSecond = couple[1].trim();
+                        second = new Depute(nomSecond, null, null);
+                    }
+
+                    Depute titulaire = new Depute(nomTitulaire, second, null);
+                    deputes.add(titulaire);
                 }
 
-                // Création liste bureaux de vote
-                String[] bureauxNames = parts[4].split(",");
+                // === Création des bureaux de vote ===
+                String[] nomBureaux = parts[4].trim().split(",");
                 List<BureauVote> bureaux = new ArrayList<>();
-                for (int i = 0; i < bureauxNames.length; i++) {
-                    bureaux.add(new BureauVote(bureauxNames[i].trim(), deputes, null));
+                for (String nomBV : nomBureaux) {
+                    BureauVote bv = new BureauVote(nomBV.trim(), deputes, null); // Distrika assigné plus tard
+                    bureaux.add(bv);
                 }
 
-                // Cherche ou crée le Faritany
+                // === Recherche ou création de Faritany ===
                 Faritany faritany = null;
-                for (int i = 0; i < faritanyList.size(); i++) {
-                    Faritany f = faritanyList.get(i);
-                    if (f.getNomFaritany().equalsIgnoreCase(faritanyNom)) {
+                for (Faritany f : faritanyList) {
+                    if (f.getNomFaritany().equalsIgnoreCase(nomFaritany)) {
                         faritany = f;
                         break;
                     }
                 }
                 if (faritany == null) {
-                    faritany = new Faritany(faritanyNom, new ArrayList<>());
+                    faritany = new Faritany(nomFaritany, new ArrayList<>());
                     faritanyList.add(faritany);
                 }
 
-                // Cherche ou crée le Faritra
+                // === Recherche ou création de Faritra ===
                 Faritra faritra = null;
-                List<Faritra> faritraList = faritany.getListFaritra();
-                for (int i = 0; i < faritraList.size(); i++) {
-                    Faritra f = faritraList.get(i);
-                    if (f.getNomFaritra().equalsIgnoreCase(faritraNom)) {
+                for (Faritra f : faritany.getListFaritra()) {
+                    if (f.getNomFaritra().equalsIgnoreCase(nomFaritra)) {
                         faritra = f;
                         break;
                     }
                 }
                 if (faritra == null) {
-                    faritra = new Faritra(faritraNom, faritany, new ArrayList<>());
-                    faritraList.add(faritra);
+                    faritra = new Faritra(nomFaritra, faritany, new ArrayList<>());
+                    faritany.getListFaritra().add(faritra);
                 }
 
-                // Crée le Distrika
-                Distrika distrika = new Distrika(distrikaNom, faritra, deputes, deputes.size());
-                for (int i = 0; i < deputes.size(); i++) {
-                    deputes.get(i).setDistrikaCandidat(distrika);
-                }
-                for (int i = 0; i < bureaux.size(); i++) {
-                    bureaux.get(i).setDistrika(distrika);
-                }
-
+                // === Création de Distrika ===
+                Distrika distrika = new Distrika(nomDistrika, faritra, deputes, nbDeputes);
                 faritra.getListDistrika().add(distrika);
-            }
 
-        } catch (IOException e) {
+                // === Association des députés et leurs seconds au Distrika ===
+                for (Depute d : deputes) {
+                    d.setDistrikaCandidat(distrika);
+                    if (d.getSecondMembre() != null) {
+                        d.getSecondMembre().setDistrikaCandidat(distrika);
+                    }
+                }
+
+                // === Mise à jour des bureaux avec le Distrika ===
+                for (BureauVote bv : bureaux) {
+                    bv.setDistrika(distrika); // suppose que tu as un setter ou constructeur adapté
+                }
+            }
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
 
