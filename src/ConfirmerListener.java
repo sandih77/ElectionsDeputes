@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ConfirmerListener implements ActionListener {
 
-    private final Fenetre fenetre;
+    Fenetre fenetre;
 
     public ConfirmerListener(Fenetre fenetre) {
         this.fenetre = fenetre;
@@ -22,17 +22,15 @@ public class ConfirmerListener implements ActionListener {
         int etape = fenetre.getEtapeSelection();
 
         switch (etape) {
-            case 0 -> { // Confirmer Faritany
+            case 0 -> { 
                 Faritany selectedFaritany = (Faritany) fenetre.getListFaritany().getSelection();
                 if (selectedFaritany == null) {
                     showMessage("Veuillez sélectionner un Faritany.");
                     return;
                 }
-                // Remplir la liste Faritra
                 fenetre.getListFaritra().remplir(selectedFaritany.getListFaritra().toArray());
                 fenetre.getListFaritra().setEnabled(true);
 
-                // Nettoyer les listes suivantes
                 fenetre.getListDistrika().vider();
                 fenetre.getListDistrika().setEnabled(false);
                 fenetre.getListDepute().vider();
@@ -43,7 +41,7 @@ public class ConfirmerListener implements ActionListener {
                 fenetre.setEtapeSelection(1);
                 fenetre.getBtnConfirmer().setText("Confirmer Faritra");
             }
-            case 1 -> { // Confirmer Faritra
+            case 1 -> { 
                 Faritra selectedFaritra = (Faritra) fenetre.getListFaritra().getSelection();
                 if (selectedFaritra == null) {
                     showMessage("Veuillez sélectionner un Faritra.");

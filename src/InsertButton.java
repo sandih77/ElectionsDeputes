@@ -1,4 +1,4 @@
-package button;
+package gui.button;
 
 import candidat.Depute;
 import delimitation.Distrika;

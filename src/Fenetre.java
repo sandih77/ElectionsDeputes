@@ -5,7 +5,7 @@ import delimitation.Distrika;
 import delimitation.Faritany;
 import delimitation.Faritra;
 import elections.BureauVote;
-import button.InsertButton;
+import gui.button.InsertButton;
 import gui.listeners.ConfirmerListener;
 
 import javax.swing.*;
@@ -96,22 +96,27 @@ public class Fenetre extends JFrame {
         btnConfirmer.addActionListener(new ConfirmerListener(this));
     }
 
-    // Méthode pour récupérer Faritany depuis fichier
     public List<Faritany> getFaritanyFromFile(String filename) {
         List<Faritany> faritanyList = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith("#") || line.isBlank()) continue;
+                if (line.startsWith("#") || line.isBlank()) {
+                    continue;
+                }
 
                 String[] parts = line.split("\\|");
-                if (parts.length < 5) continue;
+                if (parts.length < 5) {
+                    continue;
+                }
 
                 String nomFaritany = parts[0].trim();
                 String nomFaritra = parts[1].trim();
 
                 String[] distrikaInfo = parts[2].trim().split(",");
-                if (distrikaInfo.length != 2) continue;
+                if (distrikaInfo.length != 2) {
+                    continue;
+                }
 
                 String nomDistrika = distrikaInfo[0].trim();
                 int nbDeputes = Integer.parseInt(distrikaInfo[1].trim());

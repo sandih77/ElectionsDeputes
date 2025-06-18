@@ -48,7 +48,6 @@ public class Distrika {
         return this.listDeputes;
     }
 
-    // Setter si besoin
     public void setListDepute(List<Depute> listDepute) {
         this.listDeputes = listDepute;
     }

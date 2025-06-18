@@ -10,17 +10,15 @@ import java.util.List;
 
 public class FenetreResultat extends JFrame {
 
-    public FileDeroulante comboFaritany;
-    public FileDeroulante comboFaritra;
-    public FileDeroulante comboDistrika;
-    public JButton btnConfirmer;
-    public JButton boutonAfficher;
-    public JTextArea textAreaResultat;
-
-    public List<Vote> allVotes;
-    public Result resultUtil;
-
-    public int etapeSelection = 0;
+    FileDeroulante comboFaritany;
+    FileDeroulante comboFaritra;
+    FileDeroulante comboDistrika;
+    JButton btnConfirmer;
+    JButton boutonAfficher;
+    JTextArea textAreaResultat;
+    List<Vote> allVotes;
+    Result resultUtil;
+    int etapeSelection = 0;
 
     public FenetreResultat() {
         setTitle("Résultat des élections");

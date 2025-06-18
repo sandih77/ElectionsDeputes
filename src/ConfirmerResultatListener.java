@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ConfirmerResultatListener implements ActionListener {
 
-    private final FenetreResultat fenetre;
+    FenetreResultat fenetre;
 
     public ConfirmerResultatListener(FenetreResultat fenetre) {
         this.fenetre = fenetre;
