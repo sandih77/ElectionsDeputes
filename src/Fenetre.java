@@ -54,11 +54,7 @@ public class Fenetre extends JFrame {
         listDepute = new JComboBox<>();
         listBV = new JComboBox<>();
         votes = new JTextField();
-        submit = new InsertButton("Submit");
-
-        submit.addActionListener(e -> {
-            saveVoteToFile("data/votes.txt");
-        });
+        submit = new InsertButton("Submit", listFaritany, listFaritra, listDistrika, listDepute, listBV, votes);
 
         List<Faritany> faritanyList = getFaritanyFromFile("data/data.txt");
 
@@ -193,30 +189,5 @@ public class Fenetre extends JFrame {
         }
 
         return faritanyList;
-    }
-
-    public void saveVoteToFile(String filename) {
-        Faritany f = (Faritany) listFaritany.getSelectedItem();
-        Faritra r = (Faritra) listFaritra.getSelectedItem();
-        Distrika d = (Distrika) listDistrika.getSelectedItem();
-        Depute dep = (Depute) listDepute.getSelectedItem();
-        BureauVote bv = (BureauVote) listBV.getSelectedItem();
-        String voteStr = votes.getText();
-
-        if (f == null || r == null || d == null || dep == null || bv == null || voteStr.isEmpty()) {
-            System.out.println("Case vide");
-            return;
-        }
-
-        String line = f.getNomFaritany() + "|" + r.getNomFaritra() + "|" + d.getNomDistrika() + "|" + dep.getNomDepute() + "|" + bv.getNomBV() + "|" + voteStr;
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.write(line);
-            writer.newLine();
-            System.out.println("Vote enregistre");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Erreur lors de l'ecriture");
-        }
     }
 }

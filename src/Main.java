@@ -1,10 +1,10 @@
 package main;
 
-import gui.Fenetre;
+import gui.FenetreResultat;
 
 public class Main {
 
     public static void main(String[] args) {
-        new Fenetre().setVisible(true);
+        new FenetreResultat().setVisible(true);
     }
 }
