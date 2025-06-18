@@ -1,11 +1,13 @@
-Antananarivo|Analamanga|Antananarivo I|1|Rakoto:Aucun|BV 1 - Antananarivo I|200
-Antananarivo|Analamanga|Antananarivo I|1|Rakoto:Aucun|BV 2 - Antananarivo I|200
-Antananarivo|Analamanga|Antananarivo I|1|Rabe:Aucun|BV 2 - Antananarivo I|230
-Antananarivo|Analamanga|Antananarivo I|1|Rabe:Aucun|BV 1 - Antananarivo I|140
-Antananarivo|Analamanga|Antananarivo II|2|Rakotobe:Bema|BV 1 - Antananarivo II|265
-Antananarivo|Analamanga|Antananarivo II|2|Rakoto:Be|BV 1 - Antananarivo II|100
-Antananarivo|Itasy|Itasy I|2|Rasoa:Soa|BV 1 - Itasy I|150
-Antananarivo|Itasy|Itasy I|2|Rakotobe:Bema|BV 1 - Itasy I|265
-Antananarivo|Itasy|Itasy II|2|Rakoto:Be|BV 1 - Itasy II|100
-Antananarivo|Itasy|Itasy II|2|Rasoa:Soa|BV 1 - Itasy II|150
-Mahajanga|Mahajanga|Mahajanga II|2|Rasoa:Soa|BV 1 - Mahajanga II|150
+#Faritany|Faritra|Distrika|nbDeputesPeutEtreElus|Depute|BV|NbVotes
+Analamanga|Ampitatafika|Antananarivo Atsimondrano|1|C1|BV101|325
+Analamanga|Ampitatafika|Antananarivo Atsimondrano|1|C2|BV101|287
+Analamanga|Ampitatafika|Antananarivo Atsimondrano|1|C1|BV102|410
+Analamanga|Ampitatafika|Antananarivo Atsimondrano|1|C2|BV102|379
+Vakinakaratra|Ambohimena|Antsirabe I|2|C3|BV201|309
+Vakinakaratra|Ambohimena|Antsirabe I|2|C4|BV201|585
+Vakinakaratra|Ambohimena|Antsirabe I|2|C3|BV202|322
+Vakinakaratra|Ambohimena|Antsirabe I|2|C4|BV202|678
+Antsinana|Tanambao Verrerie|Toamasina I|2|C5|BV301|200
+Antsinana|Tanambao Verrerie|Toamasina I|2|C6|BV301|388
+Antsinana|Tanambao Verrerie|Toamasina I|2|C5|BV302|199
+Antsinana|Tanambao Verrerie|Toamasina I|2|C6|BV302|410

@@ -1,6 +1,7 @@
-# Faritany|Faritra|Distrika|Depute1,Depute2|BV1,BV2
-Antananarivo|Analamanga|Antananarivo I, 1|Rakoto,Rabe|BV 1 Antananarivo I,BV 2 Antananarivo I
-Antananarivo|Analamanga|Antananarivo II, 2|Rakotobe;;Bema,Rabenary;;Nary,Rasoa;;Soa|BV 1 Antananarivo II,BV 2 Antananarivo II
-Antananarivo|Itasy|Itasy II, 2|Rakotobe;;Bema,Rabenary;;Nary,Rasoa;;Soa|BV 1 Itasy II,BV 2 Itasy II
-Antananarivo|Itasy|Itasy I, 2|Rakotobe;;Bema,Rabenary;;Nary,Rasoa;;Soa|BV 1 Itasy I,BV 2 Itasy I
-Mahajanga|Mahajanga|Mahajanga I, 2|Rakotobe;;Bema,Rabenary;;Nary,Rasoa;;Soa|BV 1 Mahajanga I,BV 2 Mahajanga I
+# Faritany|Faritra|Distrika,nbDeputesPeutEtreElus|Depute1,Depute2|BV1,BV2
+Analamanga|Ampitatafika|Antananarivo Atsimondrano,1|C1,C2|BV101
+Analamanga|Ampitatafika|Antananarivo Atsimondrano,1|C1,C2|BV102
+Vakinakaratra|Ambohimena|Antsirabe I,2|C3,C4|BV201
+Vakinakaratra|Ambohimena|Antsirabe I,2|C3,C4|BV202
+Antsinana|Tanambao Verrerie|Toamasina I,2|C5,C6|BV301
+Antsinana|Tanambao Verrerie|Toamasina I,2|C5,C6|BV302

@@ -12,12 +12,14 @@ public class FenetreResultat extends JFrame {
     JComboBox<String> comboFaritany;
     JComboBox<String> comboFaritra;
     JComboBox<String> comboDistrika;
+    JButton btnConfirmer;
     JButton boutonAfficher;
-    JButton boutonCharger;
     JTextArea textAreaResultat;
 
     List<Vote> allVotes;
     Result resultUtil;
+
+    int etapeSelection = 0; // 0=Faritany, 1=Faritra, 2=Distrika
 
     public FenetreResultat() {
         setTitle("Resultat");
@@ -32,8 +34,8 @@ public class FenetreResultat extends JFrame {
         comboFaritany = new JComboBox<>();
         comboFaritra = new JComboBox<>();
         comboDistrika = new JComboBox<>();
-        boutonAfficher = new JButton("Afficher elu");
-        boutonCharger = new JButton("Charger sélection");
+        btnConfirmer = new JButton("Confirmer Faritany");
+        boutonAfficher = new JButton("Afficher élu");
         textAreaResultat = new JTextArea();
         textAreaResultat.setEditable(false);
         JScrollPane scroll = new JScrollPane(textAreaResultat);
@@ -42,19 +44,48 @@ public class FenetreResultat extends JFrame {
 
         remplirFaritany();
 
-        boutonCharger.addActionListener(e -> {
-            String faritany = (String) comboFaritany.getSelectedItem();
-            String faritra = (String) comboFaritra.getSelectedItem();
+        comboFaritra.setEnabled(false);
+        comboDistrika.setEnabled(false);
 
-            if (faritany != null && !faritany.isBlank() && (faritra == null || faritra.isBlank())) {
-                remplirFaritra(faritany);
-                comboDistrika.removeAllItems();
-                textAreaResultat.setText("");
-            }
-
-            else if (faritany != null && !faritany.isBlank() && faritra != null && !faritra.isBlank()) {
-                remplirDistrika(faritany, faritra);
-                textAreaResultat.setText("");
+        btnConfirmer.addActionListener(e -> {
+            switch (etapeSelection) {
+                case 0 -> {
+                    String faritany = (String) comboFaritany.getSelectedItem();
+                    if (faritany != null && !faritany.isBlank()) {
+                        remplirFaritra(faritany);
+                        comboFaritra.setEnabled(true);
+                        comboDistrika.removeAllItems();
+                        comboDistrika.setEnabled(false);
+                        etapeSelection = 1;
+                        btnConfirmer.setText("Confirmer Faritra");
+                        textAreaResultat.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Veuillez sélectionner un Faritany.");
+                    }
+                }
+                case 1 -> {
+                    String faritany = (String) comboFaritany.getSelectedItem();
+                    String faritra = (String) comboFaritra.getSelectedItem();
+                    if (faritra != null && !faritra.isBlank()) {
+                        remplirDistrika(faritany, faritra);
+                        comboDistrika.setEnabled(true);
+                        etapeSelection = 2;
+                        btnConfirmer.setText("Reinitialiser");
+                        textAreaResultat.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Veuillez sélectionner un Faritra.");
+                    }
+                }
+                case 2 -> {
+                    comboFaritany.setEnabled(true);
+                    comboFaritra.removeAllItems();
+                    comboFaritra.setEnabled(false);
+                    comboDistrika.removeAllItems();
+                    comboDistrika.setEnabled(false);
+                    etapeSelection = 0;
+                    btnConfirmer.setText("Confirmer Faritany");
+                    textAreaResultat.setText("");
+                }
             }
         });
 
@@ -67,14 +98,14 @@ public class FenetreResultat extends JFrame {
             if (distrika != null && !distrika.isBlank()) {
                 List<Vote> votes = resultUtil.filtrerVotesParDistrika(allVotes, distrika);
                 String elu = resultUtil.trouverEluDansDistrika(votes);
-                resultat += "Distrika : " + distrika + " → elu : " + elu + "\n";
+                resultat += "Distrika : " + distrika + " → élu : " + elu + "\n";
 
             } else if (faritra != null && !faritra.isBlank()) {
                 List<String> distrikas = resultUtil.getNomsDistrikaDansFaritra(allVotes, faritany, faritra);
                 for (String d : distrikas) {
                     List<Vote> votes = resultUtil.filtrerVotesParDistrika(allVotes, d);
                     String elu = resultUtil.trouverEluDansDistrika(votes);
-                    resultat += "Distrika : " + d + " → elu : " + elu + "\n";
+                    resultat += "Distrika : " + d + " → élu : " + elu + "\n";
                 }
 
             } else if (faritany != null && !faritany.isBlank()) {
@@ -84,7 +115,7 @@ public class FenetreResultat extends JFrame {
                     for (String d : distrikas) {
                         List<Vote> votes = resultUtil.filtrerVotesParDistrika(allVotes, d);
                         String elu = resultUtil.trouverEluDansDistrika(votes);
-                        resultat += "Distrika : " + d + " → elu : " + elu + "\n";
+                        resultat += "Distrika : " + d + " → élu : " + elu + "\n";
                     }
                 }
 
@@ -101,7 +132,7 @@ public class FenetreResultat extends JFrame {
         panelHaut.add(comboFaritra);
         panelHaut.add(new JLabel("Distrika :"));
         panelHaut.add(comboDistrika);
-        panelHaut.add(boutonCharger);
+        panelHaut.add(btnConfirmer);
         panelHaut.add(boutonAfficher);
 
         add(panelHaut, BorderLayout.NORTH);

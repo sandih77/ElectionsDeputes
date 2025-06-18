@@ -23,9 +23,8 @@ public class Fenetre extends JFrame {
     JTextField votes;
     InsertButton submit;
 
-    JButton btnConfirmerFaritany;
-    JButton btnConfirmerFaritra;
-    JButton btnConfirmerDistrika;
+    JButton btnConfirmer;
+    int etapeSelection = 0; // 0: Faritany, 1: Faritra, 2: Distrika
 
     List<Faritany> faritanyList;
 
@@ -34,23 +33,26 @@ public class Fenetre extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new GridLayout(10, 2, 5, 5));
+        setLayout(new GridLayout(12, 2, 5, 5));
 
         initializeComponents();
 
         add(new JLabel("Faritany :"));
         add(listFaritany);
-        add(btnConfirmerFaritany);
-        add(new JLabel("")); 
+        add(new JLabel(""));
+        add(new JLabel(""));
 
         add(new JLabel("Faritra :"));
         add(listFaritra);
-        add(btnConfirmerFaritra);
+        add(new JLabel(""));
         add(new JLabel(""));
 
         add(new JLabel("Distrika :"));
         add(listDistrika);
-        add(btnConfirmerDistrika);
+        add(new JLabel(""));
+        add(new JLabel(""));
+
+        add(btnConfirmer);
         add(new JLabel(""));
 
         add(new JLabel("Depute :"));
@@ -74,114 +76,109 @@ public class Fenetre extends JFrame {
         votes = new JTextField();
         submit = new InsertButton("Submit", listFaritany, listFaritra, listDistrika, listDepute, listBV, votes);
 
-        btnConfirmerFaritany = new JButton("Confirmer Faritany");
-        btnConfirmerFaritra = new JButton("Confirmer Faritra");
-        btnConfirmerDistrika = new JButton("Confirmer Distrika");
+        btnConfirmer = new JButton("Confirmer Faritany");
 
-        // Chargement initial Faritany
+        // Charger Faritany
         faritanyList = getFaritanyFromFile("data/data.txt");
         for (Faritany f : faritanyList) {
             listFaritany.addItem(f);
         }
 
-        // On désactive les combos suivants au départ
         listFaritra.setEnabled(false);
         listDistrika.setEnabled(false);
         listDepute.setEnabled(false);
         listBV.setEnabled(false);
 
-        btnConfirmerFaritra.setEnabled(false);
-        btnConfirmerDistrika.setEnabled(false);
+        btnConfirmer.addActionListener(e -> {
+            switch (etapeSelection) {
+                case 0 -> {
+                    Faritany selectedFaritany = (Faritany) listFaritany.getSelectedItem();
+                    listFaritra.removeAllItems();
+                    listDistrika.removeAllItems();
+                    listDepute.removeAllItems();
+                    listBV.removeAllItems();
 
-        // Bouton Confirmer Faritany : charge Faritra correspondants
-        btnConfirmerFaritany.addActionListener(e -> {
-            Faritany selectedFaritany = (Faritany) listFaritany.getSelectedItem();
-
-            listFaritra.removeAllItems();
-            listDistrika.removeAllItems();
-            listDepute.removeAllItems();
-            listBV.removeAllItems();
-
-            listDepute.setEnabled(false);
-            listBV.setEnabled(false);
-
-            if (selectedFaritany != null && selectedFaritany.getListFaritra() != null) {
-                for (Faritra f : selectedFaritany.getListFaritra()) {
-                    listFaritra.addItem(f);
-                }
-                listFaritra.setEnabled(true);
-                btnConfirmerFaritra.setEnabled(true);
-            } else {
-                listFaritra.setEnabled(false);
-                btnConfirmerFaritra.setEnabled(false);
-            }
-
-            listDistrika.setEnabled(false);
-            btnConfirmerDistrika.setEnabled(false);
-        });
-
-        // Bouton Confirmer Faritra : charge Distrika correspondants
-        btnConfirmerFaritra.addActionListener(e -> {
-            Faritra selectedFaritra = (Faritra) listFaritra.getSelectedItem();
-
-            listDistrika.removeAllItems();
-            listDepute.removeAllItems();
-            listBV.removeAllItems();
-
-            listDepute.setEnabled(false);
-            listBV.setEnabled(false);
-
-            if (selectedFaritra != null && selectedFaritra.getListDistrika() != null) {
-                for (Distrika d : selectedFaritra.getListDistrika()) {
-                    listDistrika.addItem(d);
-                }
-                listDistrika.setEnabled(true);
-                btnConfirmerDistrika.setEnabled(true);
-            } else {
-                listDistrika.setEnabled(false);
-                btnConfirmerDistrika.setEnabled(false);
-            }
-        });
-
-        // Bouton Confirmer Distrika : charge Depute et BV correspondants
-        btnConfirmerDistrika.addActionListener(e -> {
-            Distrika selectedDistrika = (Distrika) listDistrika.getSelectedItem();
-
-            listDepute.removeAllItems();
-            listBV.removeAllItems();
-
-            if (selectedDistrika != null) {
-                // Charge députés
-                if (selectedDistrika.getDeputeDistrika() != null) {
-                    for (Depute d : selectedDistrika.getDeputeDistrika()) {
-                        listDepute.addItem(d);
-                    }
-                    listDepute.setEnabled(true);
-                } else {
+                    listFaritra.setEnabled(false);
+                    listDistrika.setEnabled(false);
                     listDepute.setEnabled(false);
+                    listBV.setEnabled(false);
+
+                    if (selectedFaritany != null) {
+                        for (Faritra f : selectedFaritany.getListFaritra()) {
+                            listFaritra.addItem(f);
+                        }
+                        listFaritra.setEnabled(true);
+                        etapeSelection = 1;
+                        btnConfirmer.setText("Confirmer Faritra");
+                    }
+                }
+                case 1 -> {
+                    Faritra selectedFaritra = (Faritra) listFaritra.getSelectedItem();
+                    listDistrika.removeAllItems();
+                    listDepute.removeAllItems();
+                    listBV.removeAllItems();
+
+                    listDistrika.setEnabled(false);
+                    listDepute.setEnabled(false);
+                    listBV.setEnabled(false);
+
+                    if (selectedFaritra != null) {
+                        for (Distrika d : selectedFaritra.getListDistrika()) {
+                            listDistrika.addItem(d);
+                        }
+                        listDistrika.setEnabled(true);
+                        etapeSelection = 2;
+                        btnConfirmer.setText("Confirmer Distrika");
+                    }
+                }
+                case 2 -> {
+                    Distrika selectedDistrika = (Distrika) listDistrika.getSelectedItem();
+                    listDepute.removeAllItems();
+                    listBV.removeAllItems();
+
+                    listDepute.setEnabled(false);
+                    listBV.setEnabled(false);
+
+                    if (selectedDistrika != null) {
+                        for (Depute d : selectedDistrika.getDeputeDistrika()) {
+                            listDepute.addItem(d);
+                        }
+                        listDepute.setEnabled(true);
+
+                        List<BureauVote> bureaux = getBureauxFromDistrika(selectedDistrika);
+                        for (BureauVote b : bureaux) {
+                            listBV.addItem(b);
+                        }
+                        listBV.setEnabled(true);
+
+                        etapeSelection = 3;
+                        btnConfirmer.setText("Reinitialiser");
+                    }
                 }
 
-                // Charge bureaux de vote
-                List<BureauVote> bureaux = getBureauxFromDistrika(selectedDistrika);
-                if (!bureaux.isEmpty()) {
-                    for (BureauVote b : bureaux) {
-                        listBV.addItem(b);
-                    }
-                    listBV.setEnabled(true);
-                } else {
+                case 3 -> {
+                    listFaritra.removeAllItems();
+                    listDistrika.removeAllItems();
+                    listDepute.removeAllItems();
+                    listBV.removeAllItems();
+
+                    listFaritra.setEnabled(false);
+                    listDistrika.setEnabled(false);
+                    listDepute.setEnabled(false);
                     listBV.setEnabled(false);
+
+                    etapeSelection = 0;
+                    btnConfirmer.setText("Confirmer Faritany");
                 }
-            } else {
-                listDepute.setEnabled(false);
-                listBV.setEnabled(false);
+
             }
         });
     }
 
     public List<BureauVote> getBureauxFromDistrika(Distrika d) {
         return List.of(
-            new BureauVote("BV 1 - " + d.getNomDistrika(), d.getDeputeDistrika(), d),
-            new BureauVote("BV 2 - " + d.getNomDistrika(), d.getDeputeDistrika(), d)
+                new BureauVote("BV 1 - " + d.getNomDistrika(), d.getDeputeDistrika(), d),
+                new BureauVote("BV 2 - " + d.getNomDistrika(), d.getDeputeDistrika(), d)
         );
     }
 
@@ -214,17 +211,14 @@ public class Fenetre extends JFrame {
 
                 String[] nomDeputesBruts = parts[3].trim().split(",");
                 List<Depute> deputes = new ArrayList<>();
-
                 for (String nomBrut : nomDeputesBruts) {
                     String[] couple = nomBrut.trim().split(";;");
                     String nomTitulaire = couple[0].trim();
                     Depute second = null;
-
                     if (couple.length > 1) {
                         String nomSecond = couple[1].trim();
                         second = new Depute(nomSecond, null, null);
                     }
-
                     Depute titulaire = new Depute(nomTitulaire, second, null);
                     deputes.add(titulaire);
                 }
@@ -236,37 +230,27 @@ public class Fenetre extends JFrame {
                     bureaux.add(bv);
                 }
 
-                // Chercher Faritany déjà existant sinon créer
-                Faritany faritany = null;
-                for (Faritany f : faritanyList) {
-                    if (f.getNomFaritany().equalsIgnoreCase(nomFaritany)) {
-                        faritany = f;
-                        break;
-                    }
-                }
-                if (faritany == null) {
-                    faritany = new Faritany(nomFaritany, new ArrayList<>());
-                    faritanyList.add(faritany);
-                }
+                Faritany faritany = faritanyList.stream()
+                        .filter(f -> f.getNomFaritany().equalsIgnoreCase(nomFaritany))
+                        .findFirst()
+                        .orElseGet(() -> {
+                            Faritany f = new Faritany(nomFaritany, new ArrayList<>());
+                            faritanyList.add(f);
+                            return f;
+                        });
 
-                // Chercher Faritra dans ce Faritany sinon créer
-                Faritra faritra = null;
-                for (Faritra f : faritany.getListFaritra()) {
-                    if (f.getNomFaritra().equalsIgnoreCase(nomFaritra)) {
-                        faritra = f;
-                        break;
-                    }
-                }
-                if (faritra == null) {
-                    faritra = new Faritra(nomFaritra, faritany, new ArrayList<>());
-                    faritany.getListFaritra().add(faritra);
-                }
+                Faritra faritra = faritany.getListFaritra().stream()
+                        .filter(f -> f.getNomFaritra().equalsIgnoreCase(nomFaritra))
+                        .findFirst()
+                        .orElseGet(() -> {
+                            Faritra f = new Faritra(nomFaritra, faritany, new ArrayList<>());
+                            faritany.getListFaritra().add(f);
+                            return f;
+                        });
 
-                // Ajouter le distrika
                 Distrika distrika = new Distrika(nomDistrika, faritra, deputes, nbDeputes);
                 faritra.getListDistrika().add(distrika);
 
-                // Lier députés au distrika
                 for (Depute d : deputes) {
                     d.setDistrikaCandidat(distrika);
                     if (d.getSecondMembre() != null) {
@@ -274,7 +258,6 @@ public class Fenetre extends JFrame {
                     }
                 }
 
-                // Lier bureaux au distrika
                 for (BureauVote bv : bureaux) {
                     bv.setDistrika(distrika);
                 }
